@@ -1,0 +1,56 @@
+using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Item : MonoBehaviour
+{
+public int ID;
+public string Name;
+public int quantity = 1;
+private TMP_Text quantityText;
+public void Awake()
+    {
+        quantityText = GetComponentInChildren<TMP_Text>(); 
+         UpdateQuantityDisplay();
+    }
+public void UpdateQuantityDisplay()
+    {
+        if(quantityText !=null){
+        quantityText.text = quantity > 1? quantity.ToString(): "";
+        }
+    }
+public void AddToStack(int amount = 1)
+    {
+        quantity += amount;
+        UpdateQuantityDisplay();
+    }
+public int RemoveFromStack(int amount = 1)
+    {
+        int removed = Math.Min(amount,quantity);
+        quantity -= removed;
+        UpdateQuantityDisplay();
+        return removed;
+    }
+public GameObject CloneItem(int newQuantity)
+    {
+        GameObject clone = Instantiate(gameObject);
+        Item cloneItem = clone.GetComponent<Item>();
+        cloneItem.quantity = newQuantity;
+        cloneItem.UpdateQuantityDisplay();
+        return clone;
+    }
+public virtual void UseItem()
+    {
+        Debug.Log($"Using item: {Name}"); // Log the name of the item being used
+    }
+
+public virtual void Pickup()
+    {
+        Sprite itemIcon = GetComponent<Image>().sprite; // Get the sprite of the item to use as the icon in the UI
+        if(ItemPickupUiController.Instance != null)
+        {
+            ItemPickupUiController.Instance.ShowItemPickup(Name, itemIcon); // Show the item pickup UI with the item's name and icon
+        }
+    }
+}
