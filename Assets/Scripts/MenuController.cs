@@ -10,6 +10,7 @@ public class MenuController : MonoBehaviour
         {
             menuCanvas.SetActive(false); // Hide the menu panel at the start of the game
         }
+        PauseController.SetPause(false);
     }
 
     // Update is called once per frame
